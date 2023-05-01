@@ -63,8 +63,9 @@ class GameMap:
 
         return "C not found in the grid"
 
-    def move_c(self, direction):
+    def move_c(self, direction, recurse):
         dx, dy = 0, 0
+        on_path = False
         if direction == "UP":
             dy = -1
         elif direction == "DOWN":
@@ -77,7 +78,7 @@ class GameMap:
             pass
         else:
             return f"Invalid direction: {direction}"
-
+        
         new_x, new_y = self.pos_x + dx, self.pos_y + dy
         if new_x < 0 or new_x >= self.width or new_y < 0 or new_y >= self.height or self.grid[new_y][new_x] == '#':
             return json.dumps({
@@ -86,7 +87,7 @@ class GameMap:
                 "standing-on": self.standing_on(),
                 "last-movement": self.last_movement if self.last_movement else "None"
             })
-
+        
         # Restore the previous character at the old position
         self.grid[self.pos_y][self.pos_x] = self.prev_char
 
@@ -96,6 +97,11 @@ class GameMap:
         # Move 'C' to the new position
         self.grid[new_y][new_x] = 'C'
         self.pos_x, self.pos_y = new_x, new_y
+
+        if (self.standing_on() == "PATH"):
+                    on_path = True
+        if (on_path and recurse is True):
+            self.move_c(direction, False)
 
         return json.dumps({
             "map": self.get_subgrid(self.width, self.height, self.pos_x, self.pos_y).replace('\n', '\\n'),

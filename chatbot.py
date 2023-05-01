@@ -29,6 +29,12 @@ You can ONLY answer questions in the following JSON format outlined in curly bra
 "movement": "<movement direction>"
 }
 the movement key should only be either UP, DOWN, LEFT, RIGHT, or NONE
+
+C represents your position in the world
+P represents a path
+# represents a wall
+
+Your goal is to follow the path
 """}]
 
 
@@ -102,7 +108,7 @@ def game_loop():
         os.system('cls')
         print_game_info(colored_map, extra_information, movement_direction, extra_thoughts)
 
-        output = game_map.move_c(movement_direction)
+        output = game_map.move_c(movement_direction, True)
         time.sleep(0.5)
 
 if __name__ == '__main__':
