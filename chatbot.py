@@ -1,6 +1,6 @@
 import os
 import openai
-import map_parser as mp
+from map_parser import GameMap
 import time
 import json
 
@@ -10,6 +10,9 @@ with open('api_key.txt', 'r') as file:
 
 MODEL = "gpt-3.5-turbo"
 TEMPERATURE = 0.2
+
+game_map = GameMap()
+game_map.initialize()
 
 COLOR_MAPPING = {
     '.': '\033[30m.\033[0m', # black
@@ -28,7 +31,6 @@ You can ONLY answer questions in the following JSON format outlined in curly bra
 the movement key should only be either UP, DOWN, LEFT, RIGHT, or NONE
 """}]
 
-mp.initialize()
 
 def get_completion_from_messages(messages, model=MODEL, temperature=TEMPERATURE):
     response = openai.ChatCompletion.create(
@@ -70,8 +72,8 @@ def print_game_info(colored_map, extra_information, movement_direction, extra_th
     print("Moving: ", movement_direction)
     print("Thinking About: ", extra_thoughts)
     print("\n")
-    print(f"Currently at: {mp.pos_x, mp.pos_y}")
-    print(f"Currently standing on: {mp.standing_on()}")
+    print(f"Currently at: {game_map.pos_x, game_map.pos_y}")
+    print(f"Currently standing on: {game_map.standing_on()}")
     print(sum(len(msg['content']) for msg in context))
 
 def game_loop():
@@ -100,7 +102,7 @@ def game_loop():
         os.system('cls')
         print_game_info(colored_map, extra_information, movement_direction, extra_thoughts)
 
-        output = mp.move_c(movement_direction)
+        output = game_map.move_c(movement_direction)
         time.sleep(0.5)
 
 if __name__ == '__main__':
