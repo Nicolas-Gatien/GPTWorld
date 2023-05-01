@@ -117,3 +117,6 @@ class GameMap:
             return "WATER"
         elif self.prev_char == 'P':
             return "PATH"
+        
+    def get_map(self):
+        return self.map.replace('\n', '\\n')

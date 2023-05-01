@@ -33,6 +33,7 @@ the movement key should only be either UP, DOWN, LEFT, RIGHT, or NONE
 C represents your position in the world
 P represents a path
 # represents a wall
+W represents water
 
 Your goal is to follow the path
 """}]
@@ -85,7 +86,7 @@ def print_game_info(colored_map, extra_information, movement_direction, extra_th
 def game_loop():
     output = f"""
     {{
-    "map": ".PPP#......\\nPPP.#######\\nPPP.......W\\nPP.......WW\\nP........WW\\n.....C..WWW\\n.......WWWW\\n......WWWW#\\n......WWWW#\\n......WWWW#\\n......WWWW#",
+    "map": "{game_map.get_map()}",
     "extra-information": "None"
     }}
     """
@@ -109,7 +110,7 @@ def game_loop():
         print_game_info(colored_map, extra_information, movement_direction, extra_thoughts)
 
         output = game_map.move_c(movement_direction, True)
-        time.sleep(0.5)
+        time.sleep(0.05)
 
 if __name__ == '__main__':
     game_loop()
